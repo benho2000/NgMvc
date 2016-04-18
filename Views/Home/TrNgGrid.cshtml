@@ -1,0 +1,108 @@
+﻿@{
+
+}
+
+<div ng-app="angularTable" ng-controller="trnggridCtrl">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label>External Gloabl Filter: </label>
+
+                    <input class="form-control input-sm" type="text" ng-model="myGlobalFilter" placeholder="Search All" name="myMasterGlobalFilter">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <table tr-ng-grid items='myItems' selected-items="mySelectedItems" class="table table-condensed" page-items="5" filter-by="myGlobalFilter" filter-by-fields="myColumnFilter">
+        <thead>
+            <tr>
+                <th field-name="Id"></th>
+                <th field-name="Year"></th>
+                <th field-name="Make">
+                    <div>
+                        <div class="tr-ng-title" ng-class="{'tr-ng-sort': gridOptions.enableSorting}" ng-click="!((gridOptions.enableSorting && columnOptions.enableSorting!==false)||columnOptions.enableSorting) || toggleSorting(columnOptions.fieldName)">
+                            <div ng-show="(gridOptions.enableSorting && columnOptions.enableSorting!==false)||columnOptions.enableSorting"
+                                 ng-class="{'tr-ng-sort-active text-info': gridOptions.orderBy==columnOptions.fieldName, 'tr-ng-sort-inactive text-muted glyphicon glyphicon-chevron-down': gridOptions.orderBy!=columnOptions.fieldName, 'tr-ng-sort-order-normal glyphicon glyphicon-chevron-up': gridOptions.orderBy==columnOptions.fieldName && !gridOptions.orderByReverse, 'tr-ng-sort-order-reverse glyphicon glyphicon-chevron-down': gridOptions.orderBy==columnOptions.fieldName && gridOptions.orderByReverse}"
+                                 class="tr-ng-sort-inactive text-muted glyphicon glyphicon-chevron-down"></div>
+                            Make
+                        </div>
+                        <div class="tr-ng-column-filter" ng-show="(gridOptions.enableFiltering && columnOptions.enableFiltering !== false) || columnOptions.enableFiltering">
+                            <select class="form-control input-sm" ng-model="columnOptions.filter">
+                                <option value="" selected></option>
+                                <option ng-repeat="item in makeDropdownOptions">{{item}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </th>
+                <th field-name="Status"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td field-name="Id"></td>
+                <td field-name="Year"></td>
+                <td field-name="Make"></td>
+                <td field-name="Status"></td>
+                <td>
+                    <button class="btn btn-default btn-sm" ng-click="OnItemButtonClick(gridItem.Id)">
+                        Click {{gridDisplayItem.id}}
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+    <a href="#" class="btn btn-default" ng-click="OnRefresh()">Refresh</a>
+    <br />
+    <a href="#" class="btn btn-default" ng-click="OnRemoveFilter()">OnRemoveFilter</a>
+    <br />
+    <a href="#" class="btn btn-default" ng-click="OnUnselect()">Unselect</a>
+    <br />
+    <div ng-show="showChildTable">
+        <table tr-ng-grid items='mySelectedItems' class="table table-condensed" page-items="5" enable-filtering="false">
+            <tbody>
+                <tr>
+                    <td>
+                        <button class="btn btn-default btn-sm" ng-click="mySelectedItems.splice(mySelectedItems.indexOf(gridItem),1)">
+                            Remove
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-sm" ng-click="OnSelectedItemEditClick(gridItem.Id)">
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <button ng-click="OnScheduleClicked()" ng-disabled="disableScheduleButton" class="btn btn-default">Another button</button>
+    </div>
+
+    <!--https://github.com/dwmkerr/angular-modal-service-->
+    <!-- The actual modal template, just a bit o bootstrap -->
+    <script type="text/ng-template" id="modal.html">
+        <div class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" ng-click="close('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Yes or No?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>It's your call...</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" ng-click="close('No')" class="btn btn-default" data-dismiss="modal">No</button>
+                        <button type="button" ng-click="close('Yes')" class="btn btn-primary" data-dismiss="modal">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+   
+</div>
